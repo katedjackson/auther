@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "chance": "^0.8.0",
+    "curl": "^0.1.4",
     "expect": "^1.20.2",
     "nodemon": "^1.7.1"
   }
