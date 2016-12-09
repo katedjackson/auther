@@ -2,20 +2,18 @@ import axios from 'axios';
 
 /* -----------------    ACTIONS     ------------------ */
 
-const SET_CURRENT_USER = 'SET_CURRENT_USER'
-
+const ADD_NEW_USER = 'ADD_NEW_USER'
 
 /* ------------   ACTION CREATORS     ------------------ */
 
-const setCurrentUser  = user => ({ type: SET_CURRENT_USER, user: user })
-
+const addNewUser  = user => ({ type: ADD_NEW_USER, user: user })
 
 /* ------------       REDUCER     ------------------ */
 
 export default function reducer (user = {}, action) {
   switch (action.type) {
 
-    case SET_CURRENT_USER:
+    case ADD_NEW_USER:
       return action.user
 
     default:
@@ -23,19 +21,15 @@ export default function reducer (user = {}, action) {
   }
 }
 
-
 /* ------------       DISPATCHERS     ------------------ */
 
-
-
-export const userLogin = user => dispatch => {
-  axios.post('/login', user)
+export const userSignup = user => dispatch => {
+  axios.post('/signup', user)
        .then(res => {
           //if(res.status === 404) throw err(next)
-          if(res.status === 204) dispatch(setCurrentUser(user));
+          if(res.status === 204) dispatch(addNewUser(user));
 
         })
        //.then(user => console.dir(user))
-       .catch(err => console.error(`Logging user: ${user.name} unsuccesful`, err))
+       .catch(err => console.error(`Addind new user: ${user.name} unsuccesful`, err))
 }
-
