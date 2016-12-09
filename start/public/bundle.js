@@ -24162,9 +24162,13 @@
 	
 	var _stories2 = _interopRequireDefault(_stories);
 	
+	var _login = __webpack_require__(320);
+	
+	var _login2 = _interopRequireDefault(_login);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	exports.default = (0, _redux.combineReducers)({ users: _users2.default, stories: _stories2.default });
+	exports.default = (0, _redux.combineReducers)({ users: _users2.default, stories: _stories2.default, login: _login2.default });
 
 /***/ },
 /* 217 */
@@ -31904,6 +31908,8 @@
 	
 	var _reactRouter = __webpack_require__(245);
 	
+	var _login = __webpack_require__(320);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -32019,7 +32025,13 @@
 	      var message = this.props.message;
 	
 	      event.preventDefault();
-	      console.log(message + ' isn\'t implemented yet');
+	
+	      var user = {
+	        email: event.target.email.value,
+	        password: event.target.password.value
+	      };
+	
+	      this.props.userLogin(user);
 	    }
 	  }]);
 	
@@ -32031,7 +32043,7 @@
 	var mapState = function mapState() {
 	  return { message: 'Log in' };
 	};
-	var mapDispatch = null;
+	var mapDispatch = { userLogin: _login.userLogin };
 	
 	exports.default = (0, _reactRedux.connect)(mapState, mapDispatch)(Login);
 
@@ -50384,6 +50396,66 @@
 	
 	exports.default = ContentEditable;
 	module.exports = exports['default'];
+
+/***/ },
+/* 320 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.userLogin = undefined;
+	exports.default = reducer;
+	
+	var _axios = __webpack_require__(218);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* -----------------    ACTIONS     ------------------ */
+	
+	var SET_CURRENT_USER = 'SET_CURRENT_USER';
+	
+	/* ------------   ACTION CREATORS     ------------------ */
+	
+	var setCurrentUser = function setCurrentUser(user) {
+	  return { type: SET_CURRENT_USER, user: user };
+	};
+	
+	/* ------------       REDUCER     ------------------ */
+	
+	function reducer() {
+	  var user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	
+	    case SET_CURRENT_USER:
+	      return action.user;
+	
+	    default:
+	      return user;
+	  }
+	}
+	
+	/* ------------       DISPATCHERS     ------------------ */
+	
+	var userLogin = exports.userLogin = function userLogin(user) {
+	  return function (dispatch) {
+	    console.dir(user);
+	    _axios2.default.post('/login', user).then(function (res) {
+	      //if(res.status === 404) throw err(next)
+	      if (res.status === 204) dispatch(setCurrentUser(user));
+	    })
+	    //.then(user => console.dir(user))
+	    .catch(function (err) {
+	      return console.error('Logging user: ' + user.name + ' unsuccesful', err);
+	    });
+	  };
+	};
 
 /***/ }
 /******/ ]);
